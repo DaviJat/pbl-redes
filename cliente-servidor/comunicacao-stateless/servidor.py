@@ -1,39 +1,35 @@
 import socket
-import os
+import json
 
-# Configurações básicas
 SERVER_IP = socket.gethostbyname(socket.gethostname())
 SERVER_PORT = 3000 
 
-my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-my_socket.bind((SERVER_IP, SERVER_PORT))
-my_socket.listen(1)
+# Criação do socket do servidor
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+server_socket.bind((SERVER_IP, SERVER_PORT))
+server_socket.listen(5)
 
-print(SERVER_IP, SERVER_PORT)
+print(f"Servidor rodando em {SERVER_IP}:{SERVER_PORT}")
 
 while True:
-    connection, address = my_socket.accept()
-    request = connection.recv(1024).decode('utf-8')
-    try:
-        # Tentando abrir e ler o arquivo HTML
-        file_path = os.path.join(os.path.dirname(__file__), 'index.html')
-        print(file_path)
+    # Aceita uma conexão
+    connection, address = server_socket.accept()
+    message = connection.recv(1024).decode("utf-8")
 
-        with open(file_path, 'r') as file:
-            response = file.read()
+    match message:
+        case 'menu_principal':
+            response = {
+                "page_layout": [
+                    {"button": {"label": "Mostra lista", "method": "mostra_lista"}},
+                    {"button": {"label": "Sair", "method": "sair"}}
+                ]
+            }
+            json_response = json.dumps(response)
+            connection.sendall(json_response.encode('utf-8'))
+        case 'mostra_lista':
+            print('mostra_lista')
+        case 'sair':
+            print('sair')
 
-        # Cabeçalho de sucesso
-        header = 'HTTP/1.1 200 OK\nContent-Type: text/html\n\n'
-        # Transforma o conteúdo do HTML em bytes
-        response = response.encode('utf-8')
-
-    except Exception as e:
-        print(e)
-        header = 'HTTP/1.1 404 Not Found\n\n'
-        response = '<h1>404 Not Found</h1>'.encode('utf-8')
-
-    # Envia a resposta
-    final_response = header.encode('utf-8') + response
-    connection.send(final_response)
     connection.close()
