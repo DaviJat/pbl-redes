@@ -1,35 +1,65 @@
 import socket
 import json
+import threading
 
-SERVER_IP = socket.gethostbyname(socket.gethostname())
-SERVER_PORT = 3000 
+from VendePass.funcoes_servidor import *
 
-# Criação do socket do servidor
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server_socket.bind((SERVER_IP, SERVER_PORT))
-server_socket.listen(5)
+# Função que lida com a comunicação com o cliente
+def handle_client(client_socket):
+    try:
+        # Recebe a requisição do cliente
+        request = client_socket.recv(1024).decode('utf-8')
+        print(f"Requisição recebida: {request}")
 
-print(f"Servidor rodando em {SERVER_IP}:{SERVER_PORT}")
-
-while True:
-    # Aceita uma conexão
-    connection, address = server_socket.accept()
-    message = connection.recv(1024).decode("utf-8")
-
-    match message:
-        case 'menu_principal':
-            response = {
-                "page_layout": [
-                    {"button": {"label": "Mostra lista", "method": "mostra_lista"}},
-                    {"button": {"label": "Sair", "method": "sair"}}
-                ]
-            }
-            json_response = json.dumps(response)
-            connection.sendall(json_response.encode('utf-8'))
-        case 'mostra_lista':
-            print('mostra_lista')
-        case 'sair':
+        # Processamento da requisição e preparo da resposta
+        if request == 'menu_principal':
+            response = retorna_menu_principal()
+        elif request == 'mostra_lista':  
+            response = retorna_lista_trechos()
+        elif request == 'sair':
             print('sair')
+            response = {"page_layout": []}
+        else:
+            response = {"page_layout": []}  # Resposta vazia para requisições desconhecidas
 
-    connection.close()
+        # Envia resposta ao cliente em formato JSON
+        client_socket.send(json.dumps(response).encode('utf-8'))
+    
+    except Exception as e:
+        print(f"Erro ao lidar com cliente: {e}")
+    
+    finally:
+        # Fecha a conexão com o cliente após enviar a resposta
+        client_socket.close()
+
+# Função para iniciar o servidor
+def iniciar_servidor():
+    SERVER_IP = socket.gethostbyname(socket.gethostname())
+    SERVER_PORT = 3000
+
+    # Criação do socket do servidor
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_socket.bind((SERVER_IP, SERVER_PORT))
+    server_socket.listen(5)
+
+    print(f"Servidor rodando em {SERVER_IP} na porta {SERVER_PORT}")
+
+    # Loop para aceitar conexões de clientes
+    while True:
+        try:
+            # Aceita uma nova conexão
+            client_socket, addr = server_socket.accept()
+            print(f"Conexão aceita de {addr}")
+
+            # Inicia uma nova thread para lidar com o cliente
+            client_handler = threading.Thread(target=handle_client, args=(client_socket,))
+            client_handler.start()
+
+        except KeyboardInterrupt:
+            print("\nServidor encerrado.")
+            server_socket.close()
+            break
+
+# Inicializa o servidor
+iniciar_servidor()
