@@ -4,12 +4,12 @@ import socket
 import json
 
 # Função para limpar a janela do navegador
-def clear_navegador(navegador):
+def limpar_navegador(navegador):
     for widget in navegador.winfo_children():
         widget.destroy()
 
 # Função para enviar a requisição para o servidor
-def send_request(method):
+def enviar_requisicao(method):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((SERVER_IP, int(SERVER_PORT)))
     client_socket.send(method.encode("utf-8"))
@@ -25,13 +25,13 @@ def send_request(method):
                 button_label = button_data["label"]
                 button_method = button_data["method"]
                 # Cria botões na interface com base na resposta do servidor
-                tk.Button(navegador, text=button_label, command=lambda method=button_method: send_request(method)).pack(pady=10)
-    clear_navegador(navegador)
+                tk.Button(navegador, text=button_label, command=lambda method=button_method: enviar_requisicao(method)).pack(pady=10)
+    limpar_navegador(navegador)
 
     client_socket.close()
 
 # Função de conexão ao servidor
-def on_connect():
+def iniciar_conexao():
     ip = ip_entry.get()
     port = port_entry.get()
     
@@ -42,12 +42,12 @@ def on_connect():
         messagebox.showerror("Erro", "Você deve inserir a porta do servidor!")
     else:
         # Limpa a janela
-        clear_navegador(navegador)
+        limpar_navegador(navegador)
         global SERVER_IP, SERVER_PORT
         SERVER_IP, SERVER_PORT = ip, port
        
         # Solicita o menu principal para mostrar ao usuário
-        send_request('menu_principal')
+        enviar_requisicao('menu_principal')
 
 # Função para iniciar o navegador
 def iniciar_navegador():
@@ -70,7 +70,7 @@ def iniciar_navegador():
     port_entry.grid(row=1, column=1, padx=10, pady=10)
 
     # Botão para conectar ao servidor
-    connect_button = tk.Button(navegador, text="Conectar", command=on_connect)
+    connect_button = tk.Button(navegador, text="Conectar", command=iniciar_conexao)
     connect_button.grid(row=2, column=0, columnspan=2, pady=10)
 
     # Inicia o loop principal do Tkinter

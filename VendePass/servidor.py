@@ -5,7 +5,7 @@ import threading
 from VendePass.funcoes_servidor import *
 
 # Função que lida com a comunicação com o cliente
-def handle_client(client_socket):
+def tratar_cliente(client_socket):
     try:
         # Recebe a requisição do cliente
         request = client_socket.recv(1024).decode('utf-8')
@@ -53,7 +53,7 @@ def iniciar_servidor():
             print(f"Conexão aceita de {addr}")
 
             # Inicia uma nova thread para lidar com o cliente
-            client_handler = threading.Thread(target=handle_client, args=(client_socket,))
+            client_handler = threading.Thread(target=tratar_cliente, args=(client_socket,))
             client_handler.start()
 
         except KeyboardInterrupt:
