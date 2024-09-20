@@ -9,24 +9,52 @@ def limpar_navegador(navegador):
         widget.destroy()
 
 # Função para enviar a requisição para o servidor
-def enviar_requisicao(method):
+def enviar_requisicao(method, data):
+
+
+    # Gera a requisição a ser enviada para o servidor
+    request = {
+        "method": method,
+        "data": data
+    }    
+
+    # Dicionário para armazenar dados da requisição
+    data_request = {}
+
+    # Abre o socket de conexão e envia a requisição
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((SERVER_IP, int(SERVER_PORT)))
-    client_socket.send(method.encode("utf-8"))
+    client_socket.send(json.dumps(request).encode("utf-8"))
 
+    # Recebe resposta do cliente
     server_response = client_socket.recv(1024).decode('utf-8')
-    data = json.loads(server_response)
-    
-    page_layout = data.get("page_layout", "")
+    response = json.loads(server_response)
+
+    # Verifica se o servidor um layout de página para renderizar
+    page_layout = response.get("page_layout", "")
     if page_layout != "":
+        limpar_navegador(navegador)
         for item in page_layout:
+            if "dropdown" in item:
+                dropdown_info = item["dropdown"]
+
+                label = tk.Label(navegador, text=dropdown_info["label"])
+                label.pack(pady=5)
+
+                # Variável que armazena o valor selecionado no dropdown
+                numero_selecionado = tk.StringVar(navegador)
+                numero_selecionado.set(dropdown_info["options"][0])
+
+                option_menu = tk.OptionMenu(navegador, numero_selecionado, *dropdown_info["options"])
+                option_menu.pack(pady=5)
+
+                # Adiciona o valor do dropdown ao data
+                data_request[dropdown_info["name"]] = numero_selecionado.get()
             if "button" in item:
                 button_data = item["button"]
                 button_label = button_data["label"]
                 button_method = button_data["method"]
-                # Cria botões na interface com base na resposta do servidor
-                tk.Button(navegador, text=button_label, command=lambda method=button_method: enviar_requisicao(method)).pack(pady=10)
-    limpar_navegador(navegador)
+                tk.Button(navegador, text=button_label, command=lambda method=button_method, data=data_request: enviar_requisicao(method, data)).pack(pady=10)
 
     client_socket.close()
 
@@ -45,9 +73,12 @@ def iniciar_conexao():
         limpar_navegador(navegador)
         global SERVER_IP, SERVER_PORT
         SERVER_IP, SERVER_PORT = ip, port
-       
+
+        method = "menu_principal"
+        data = {}
+
         # Solicita o menu principal para mostrar ao usuário
-        enviar_requisicao('menu_principal')
+        enviar_requisicao(method, data)
 
 # Função para iniciar o navegador
 def iniciar_navegador():
