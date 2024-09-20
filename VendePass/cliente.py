@@ -10,13 +10,11 @@ def limpar_navegador(navegador):
 
 # Função para enviar a requisição para o servidor
 def enviar_requisicao(method, data):
-
-
     # Gera a requisição a ser enviada para o servidor
     request = {
         "method": method,
         "data": data
-    }    
+    }
 
     # Dicionário para armazenar dados da requisição
     data_request = {}
@@ -30,7 +28,7 @@ def enviar_requisicao(method, data):
     server_response = client_socket.recv(1024).decode('utf-8')
     response = json.loads(server_response)
 
-    # Verifica se o servidor um layout de página para renderizar
+    # Verifica se o servidor enviou um layout de página para renderizar
     page_layout = response.get("page_layout", "")
     if page_layout != "":
         limpar_navegador(navegador)
@@ -45,11 +43,20 @@ def enviar_requisicao(method, data):
                 numero_selecionado = tk.StringVar(navegador)
                 numero_selecionado.set(dropdown_info["options"][0])
 
+                # Função para atualizar o data_request
+                def atualizar_data_request(*args):
+                    valor_selecionado = numero_selecionado.get()
+                    data_request[dropdown_info["name"]] = valor_selecionado
+
+                # Adiciona um trace para chamar a função quando o valor mudar
+                numero_selecionado.trace("w", atualizar_data_request)
+
                 option_menu = tk.OptionMenu(navegador, numero_selecionado, *dropdown_info["options"])
                 option_menu.pack(pady=5)
 
-                # Adiciona o valor do dropdown ao data
+                # Inicializa o valor no data_request
                 data_request[dropdown_info["name"]] = numero_selecionado.get()
+                
             if "button" in item:
                 button_data = item["button"]
                 button_label = button_data["label"]
