@@ -25,6 +25,8 @@ def tratar_cliente(client_socket):
             response = retorna_escolha_destino()
         elif method == 'trechos_disponiveis':
             response = retorna_trechos_disponiveis(data)
+        elif method == 'comprar_rota':
+            response = retorna_confirmacao_rota(data)
         else:
             response = {"page_layout": []}  # Resposta vazia para requisições desconhecidas
 

@@ -32,6 +32,7 @@ def retorna_lista_trechos():
 
     return response
 
+# Mostra 10 melhores trechos disponíveis para o cliente
 def retorna_trechos_disponiveis(data):
     grafo = criar_grafo()
     origem = data.get("origem")
@@ -50,7 +51,22 @@ def retorna_trechos_disponiveis(data):
     else:
         response["page_layout"].append({"message": "Nenhuma rota disponível."})
 
-    # MOSTRA AS ROTAS, FALTA COLOCAR O BOTAO DE COMPRAR ROTA, QUE VAI CHAMAR UM MÉTODO PARA VERIFICAR SE AINDA ESTÁ DISPONÍVEL,
-    # E SEGUIR O RESTO DA LOGICA, SE COMPRAR, TIRAR DO GRAFO, SE NÃO COMPRAR AVISAR QUE ESTÁ INDISPONÍVEL
+    response["page_layout"].append({"button": {"label": "Comprar rota", "method": "comprar_rota"}})
+    response["page_layout"].append({"button": {"label": "Voltar", "method": "escolher_destino"}})
+
     return response
 
+# Retorna confirmação de compra da rota selecionada
+def retorna_confirmacao_rota(data):
+    print(data)
+    # Exemplo de print
+    # {'rota': '3: Brasília -> Belo Horizonte -> Recife (Distância: 2830 km) - Disponível'}
+
+    # Essa rota foi a que o cliente escolheu para comprar
+    # Nessa função deve ser feita a confirmação de compra, verificando se essa rota ainda está disponível
+
+    # Se estiver disponível, muda para uma tela simples com um botão (Compra confirmada. voltar ao menu principal)
+    # e e remove os trechos dos trechos disponíveis
+
+    # Se NÃO estiver disponível, muda para uma tela com o botão (Rota não está mais disponível indisponível, 
+    # voltar para a escolha de destino )
