@@ -39,17 +39,20 @@ def enviar_requisicao(method, data):
                 label = tk.Label(navegador, text=dropdown_info["label"])
                 label.pack(pady=5)
 
-                # Variável que armazena o valor selecionado no dropdown
+                # Variável que armazena o valor selecionado no dropdown (uma instância para cada dropdown)
                 numero_selecionado = tk.StringVar(navegador)
                 numero_selecionado.set(dropdown_info["options"][0])
 
-                # Função para atualizar o data_request
-                def atualizar_data_request(*args):
-                    valor_selecionado = numero_selecionado.get()
-                    data_request[dropdown_info["name"]] = valor_selecionado
+                # Função para atualizar o data_request para cada dropdown
+                def atualizar_data_request(dropdown_name, numero_selecionado_var):
+                    def inner(*args):
+                        valor_selecionado = numero_selecionado_var.get()
+                        print(f"---------\n{dropdown_name}\n{valor_selecionado}\n---------")
+                        data_request[dropdown_name] = valor_selecionado
+                    return inner
 
-                # Adiciona um trace para chamar a função quando o valor mudar
-                numero_selecionado.trace("w", atualizar_data_request)
+                # Adiciona um trace para chamar a função quando o valor mudar, agora usando a variável correta
+                numero_selecionado.trace("w", atualizar_data_request(dropdown_info["name"], numero_selecionado))
 
                 option_menu = tk.OptionMenu(navegador, numero_selecionado, *dropdown_info["options"])
                 option_menu.pack(pady=5)
