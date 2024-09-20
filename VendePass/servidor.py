@@ -8,7 +8,7 @@ from funcoes_servidor import *
 def tratar_cliente(client_socket):
     try:
          # Recebe a requisição do cliente
-        request = client_socket.recv(1024).decode('utf-8')
+        request = client_socket.recv(8192).decode('utf-8')
         print(f"Requisição recebida: {request}")
 
         # Converte a string JSON para um dicionário

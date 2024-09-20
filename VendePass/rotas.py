@@ -53,16 +53,20 @@ distancias = {
     ('Recife', 'Porto Alegre'): (3700, 2),
 }
 
+grafo = nx.Graph()
+
 # Criar o grafo
 def criar_grafo():
-    G = nx.Graph()
+    global grafo
     for (cidade1, cidade2), (distancia, passagens) in distancias.items():
-        G.add_edge(cidade1, cidade2, weight=distancia, tickets=passagens)
-    return G
+        grafo.add_edge(cidade1, cidade2, weight=distancia, tickets=passagens)
+    return grafo
 
 def obter_rotas_disponiveis(grafo, cidade_origem, cidade_destino):
     caminhos_possiveis = []
 
+    if cidade_origem == cidade_destino:
+        return caminhos_possiveis
     def dfs(atual, destino, caminho_atual, visitados):
         if atual == destino:
             caminhos_possiveis.append(caminho_atual.copy())

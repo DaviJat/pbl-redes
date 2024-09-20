@@ -66,6 +66,10 @@ def enviar_requisicao(method, data):
                 button_method = button_data["method"]
                 tk.Button(navegador, text=button_label, command=lambda method=button_method, data=data_request: enviar_requisicao(method, data)).pack(pady=10)
 
+            if "message" in item:
+                message_label = item["message"]
+                tk.Label(navegador, text=message_label).pack(pady=10)
+
     client_socket.close()
 
 # Função de conexão ao servidor
