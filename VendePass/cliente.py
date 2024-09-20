@@ -25,7 +25,7 @@ def enviar_requisicao(method, data):
     client_socket.send(json.dumps(request).encode("utf-8"))
 
     # Recebe resposta do cliente
-    server_response = client_socket.recv(1024).decode('utf-8')
+    server_response = client_socket.recv(8192).decode('utf-8')
     response = json.loads(server_response)
 
     # Verifica se o servidor enviou um layout de página para renderizar
