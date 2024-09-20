@@ -23,10 +23,10 @@ def tratar_cliente(client_socket):
             response = retorna_menu_principal()
         elif method == 'escolher_destino':
             response = retorna_escolha_destino()
-        elif method == 'envia_selecoes':
-            print(data)
-            print('Com os dados recebidos, gera tela com os trechos disponíveis')
-            
+        elif method == 'trechos_disponiveis':
+            print('teste')
+            response = retorna_trechos_disponiveis(data)
+            print('teste')
         else:
             response = {"page_layout": []}  # Resposta vazia para requisições desconhecidas
 

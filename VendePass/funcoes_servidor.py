@@ -65,9 +65,9 @@ def retorna_menu_principal():
 def retorna_escolha_destino():
     response = {
         "page_layout": [
-            {"dropdown": {"name": "cor","label": "Escolha uma cor", "options": ["Vermelho", "Azul", "Verde", "Amarelo"]}},
-            {"dropdown": {"name": "numero","label": "Escolha um número", "options": ["1", "2", "3", "4"]}},
-            {"button": {"label": "Enviar Seleções", "method": "envia_selecoes"}}
+            {"dropdown": {"name": "origem","label": "Escolha a origem", "options": ["Vermelho", "Azul", "Verde", "Amarelo"]}},
+            {"dropdown": {"name": "destino","label": "Escolha o destino", "options": ["1", "2", "3", "4"]}},
+            {"button": {"label": "Enviar Seleções", "method": "trechos_disponiveis"}}
         ]
     }
     
@@ -81,4 +81,16 @@ def retorna_lista_trechos():
         ]
     }
 
-    return response  
+    return response
+
+def retorna_trechos_disponiveis(data):
+    print("origem:" + data.get("origem"))
+    print("destino:" + data.get("destino"))
+
+    response = {
+        "page_layout": [
+            {"button": {"label": "Voltar", "method": "menu_principal"}}
+        ]
+    }
+
+    return response
