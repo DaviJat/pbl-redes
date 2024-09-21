@@ -1,11 +1,29 @@
 import networkx as nx
+import pickle
+import os
 
 # Definir as cidades brasileiras
 cidades = ['São Paulo', 'Rio de Janeiro', 'Brasília', 'Salvador', 'Fortaleza',
            'Belo Horizonte', 'Manaus', 'Curitiba', 'Recife', 'Porto Alegre']
 
+# Caminho para o arquivo de distâncias
+arquivo_distancias = "distancias.plk"
+
+# Função para salvar as distâncias no arquivo
+def salvar_distancias(distancias):
+    with open(arquivo_distancias, 'wb') as arquivo:
+        pickle.dump(distancias, arquivo)
+
+# Função para carregar as distâncias do arquivo
+def carregar_distancias():
+    if os.path.exists(arquivo_distancias):
+        with open(arquivo_distancias, 'rb') as arquivo:
+            return pickle.load(arquivo)
+    else:
+        return None
+
 # Definir as distâncias reais entre as cidades (em km) e a quantidade de passagens disponíveis por trecho
-distancias = {
+distancias_default = {
     ('São Paulo', 'Rio de Janeiro'): (430, 10),
     ('São Paulo', 'Brasília'): (1015, 5),
     ('São Paulo', 'Salvador'): (1960, 3),
@@ -52,6 +70,12 @@ distancias = {
     ('Curitiba', 'Porto Alegre'): (710, 7),
     ('Recife', 'Porto Alegre'): (3700, 2),
 }
+
+# Verificar se o arquivo de distâncias existe e carregar ou inicializar
+distancias = carregar_distancias()
+if distancias is None:
+    distancias = distancias_default
+    salvar_distancias(distancias)
 
 grafo = nx.Graph()
 
