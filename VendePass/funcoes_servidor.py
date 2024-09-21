@@ -1,7 +1,4 @@
 import re
-import pickle
-
-from Trecho.servidor_teste import ticket
 from rotas import criar_grafo, obter_rotas_disponiveis, cidades, salvar_distancias, distancias
 
 grafo = criar_grafo()

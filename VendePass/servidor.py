@@ -1,7 +1,6 @@
 import socket
 import json
 import threading
-
 from funcoes_servidor import *
 
 # Função que lida com a comunicação com o cliente
