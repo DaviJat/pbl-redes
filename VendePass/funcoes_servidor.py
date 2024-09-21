@@ -1,8 +1,11 @@
 import re
+import pickle
 
-from rotas import criar_grafo, obter_rotas_disponiveis, cidades
+from Trecho.servidor_teste import ticket
+from rotas import criar_grafo, obter_rotas_disponiveis, cidades, salvar_distancias, distancias
 
 grafo = criar_grafo()
+tickets = distancias
 
 # Função que retorna o menu principal
 def retorna_menu_principal():
@@ -62,8 +65,9 @@ def retorna_trechos_disponiveis(data):
 
 # Retorna confirmação de compra da rota selecionada
 def retorna_confirmacao_rota(data):
-    global grafo
+    global grafo, tickets
     rota_selecionada = data.get("rota")  # Exemplo de formato: "3: Brasília -> Belo Horizonte -> Recife (Distância: 2830 km) - Disponível"
+
     # Extraindo a rota em formato de string e número da rota escolhida
     rota_str, status = rota_selecionada.split(" - ")
     cidades_match = re.search(r": (.+) \(Distância:", rota_str)
@@ -74,8 +78,14 @@ def retorna_confirmacao_rota(data):
         # Atualiza o número de passagens nas arestas do caminho escolhido
         for u, v in zip(caminho, caminho[1:]):
             grafo[u][v]['tickets'] -= 1
+            # Atualiza também o dicionário distancias para refletir a nova quantidade de passagens
+            tickets[(u, v)] = (grafo[u][v]['weight'], grafo[u][v]['tickets'])
+            if (v, u) in tickets:
+                tickets[(v, u)] = (grafo[u][v]['weight'], grafo[u][v]['tickets'])
             print(f"Passagens restantes no trecho {u} -> {v}: {grafo[u][v]['tickets']}")
 
+        # Salva o estado atualizado das passagens no arquivo
+        salvar_distancias(tickets)
         # Resposta de confirmação de compra
         response = {
             "page_layout": [
