@@ -1,7 +1,4 @@
 import re
-import pickle
-
-from Trecho.servidor_teste import ticket
 from rotas import criar_grafo, obter_rotas_disponiveis, cidades, salvar_distancias, distancias
 
 grafo = criar_grafo()
@@ -77,12 +74,23 @@ def retorna_confirmacao_rota(data):
     if "Disponível" in status:
         # Atualiza o número de passagens nas arestas do caminho escolhido
         for u, v in zip(caminho, caminho[1:]):
-            grafo[u][v]['tickets'] -= 1
-            # Atualiza também o dicionário distancias para refletir a nova quantidade de passagens
-            tickets[(u, v)] = (grafo[u][v]['weight'], grafo[u][v]['tickets'])
-            if (v, u) in tickets:
-                tickets[(v, u)] = (grafo[u][v]['weight'], grafo[u][v]['tickets'])
-            print(f"Passagens restantes no trecho {u} -> {v}: {grafo[u][v]['tickets']}")
+            if grafo[u][v]['tickets'] > 0:
+                grafo[u][v]['tickets'] -= 1
+                # Atualiza também o dicionário distancias para refletir a nova quantidade de passagens
+                tickets[(u, v)] = (grafo[u][v]['weight'], grafo[u][v]['tickets'])
+                if (v, u) in tickets:
+                    tickets[(v, u)] = (grafo[u][v]['weight'], grafo[u][v]['tickets'])
+                print(f"Passagens restantes no trecho {u} -> {v}: {grafo[u][v]['tickets']}")
+            else:
+                # Resposta de falha ao comprar a rota
+                response = {
+                    "page_layout": [
+                        {"message": "Rota indisponível. Por favor, escolha outra rota."},
+                        {"button": {"label": "Escolher outro destino", "method": "escolher_destino"}}
+                    ]
+                }
+
+                return response
 
         # Salva o estado atualizado das passagens no arquivo
         salvar_distancias(tickets)
