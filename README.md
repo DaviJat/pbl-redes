@@ -1,8 +1,10 @@
 # Implementação de Sistema de Venda de Passagens Aéreas para Companhias Low-Cost com Comunicação TCP/IP e Infraestrutura em Docker
 
-Davi Jatobá Galdino, Gabriel Sena Barbosa  
+**Davi Jatobá Galdino, Gabriel Sena Barbosa**
+
 Universidade Estadual de Feira de Santana (UEFS)
-Av. Transnordestina, s/n, Novo Horizonte - BA, 44036-900  
+Av. Transnordestina, s/n, Novo Horizonte - BA, 44036-900
+
 ddavijatoba33@gmail.com, gabriel.sena.barbosa@gmail.com
 
 **Abstract:** The low-cost carrier (LCC) sector has transformed the air transportation industry, making air travel more accessible to a larger audience. In this context, there is a growing need for a system that streamlines the ticket purchasing process, enabling users to select various flight segments. This work presents the development of a system that utilizes a TCP/IP-based API to facilitate ticket purchases. The system is designed with basic Socket API support and aims to manage multiple simultaneous requests, ensuring the integrity of reservations. Users will be able to purchase tickets efficiently, providing a seamless purchasing experience.
