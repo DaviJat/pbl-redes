@@ -76,9 +76,19 @@ page_layout: Uma lista de componentes da interface, como botões, dropdowns, e m
 Figura 2: Exemplo resposta do servidor
 
 ### 3.4. Testes
-Nos primeiros testes realizados com os protótipos, descritos no tópico _2.2 Desenvolvimento de protótipos de funcionamento_, foi possível conectar dois clientes simultaneamente ao servidor, cada um em máquinas diferentes, simulando cenários reais de compra de passagens. Esses testes iniciais tinham como objetivo validar a capacidade do sistema de gerenciar múltiplas conexões, verificar a integridade das informações compartilhadas e garantir que atualizações, como a redução de passagens disponíveis, fossem refletidas em tempo real para todos os clientes conectados.
+Nos primeiros testes realizados com os protótipos, descritos no tópico 2.2 Desenvolvimento de protótipos de funcionamento, foi possível conectar dois clientes simultaneamente ao servidor, cada um em máquinas diferentes, simulando cenários reais de compra de passagens. Esses testes iniciais tinham como objetivo validar a capacidade do sistema de gerenciar múltiplas conexões, verificar a integridade das informações compartilhadas e garantir que atualizações, como a redução de passagens disponíveis, fossem refletidas em tempo real para todos os clientes conectados.
 
-Após a finalização do projeto, foram realizados testes adicionais utilizando containers Docker. Esse método permitiu a simulação de conexão simultânea de múltiplos clientes em diferentes máquinas, que interagiram com o servidor para realizar a compra de passagens.
+Após a finalização do projeto, enfrentamos problemas para rodar o cliente no container Docker, pois era necessária uma autorização no laboratório para que o Linux pudesse gerar a interface gráfica utilizando a biblioteca Tkinter. Para contornar essa situação, criamos um arquivo simulador_cliente, que automatiza as requisições e realiza a compra de uma rota sem a necessidade da interface gráfica. Dessa forma, conseguimos executar a compra de múltiplos clientes no servidor simultaneamente, utilizando containers Docker para simular diferentes máquinas conectadas.
+
+O simulador realiza as mesmas operações que o cliente tradicional, porém executa as requisições de forma sequencial com dados previamente configurados.
+
+### 3.5 Instruções para execução do sistema
+Construção da Imagem Docker: No terminal, navegue até o diretório onde o Dockerfile está localizado e execute o comando para criar a imagem: docker build -t vendepass-app .
+
+Execução Manual do Servidor: Após a imagem ser construída, o servidor pode ser iniciado manualmente com o seguinte comando: docker run -d -p 3000:3000 vendepass-app
+
+Uso do Docker Compose: Para automatizar o processo de iniciar o servidor e os clientes, utilize o comando: docker-compose up
+
 
 ## 4. Conclusão
 O sistema desenvolvido para a venda de passagens aéreas de companhias low-cost foi implementado com uma arquitetura em sockets TCP/IP, oferecendo uma interface gráfica simples para interação do usuário. Foram criadas funcionalidades que permitem a gestão de rotas e passagens, além da compra de bilhetes. O uso de JSON como protocolo de comunicação trouxe a vantagem de compatibilidade ampla, já que é um formato muito utilizado atualmente.
