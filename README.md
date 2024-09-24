@@ -62,6 +62,7 @@ data: Um dicionário opcional que contém os dados necessários para o método e
 Exemplo de requisição:
 
 ![Figura 1: Exemplo requisição do cliente](https://github.com/user-attachments/assets/eff8e70b-3c1c-4447-bb58-39644563b66b)
+
 Figura 1: Exemplo requisição do cliente
 
 Figura 1 mostra uma requisição pedindo que o servidor retorne as rotas disponíveis entre as cidades de São Paulo e Rio de Janeiro.
