@@ -97,5 +97,13 @@ Embora o sistema esteja funcional, algumas funcionalidades mais avançadas, como
 
 ## 5. Referências
 PYTHON Software Foundation. Python documentation: socket — Low-level networking interface. Disponível em: https://docs.python.org/3/library/socket.html. Acesso em: set. 2024.
+
 MOZILLA DEVELOPER NETWORK. HTTP - Visão geral. Disponível em: https://developer.mozilla.org/pt-BR/docs/Web/HTTP. Acesso em: set. 2024.
+
 DOCKER INC. O que é Docker?. Disponível em: https://www.docker.com/what-docker. Acesso em: set. 2024.
+
+BÓSON TREINAMENTOS. Scripts Cliente e Servidor com Módulo Socket em Python - Exemplo. Disponível em: https://www.youtube.com/watch?v=vbUuJ2_6wqs&t=703s. Acesso em: set. 2024.
+
+MATEUS MULLER. SOCKET: O que é um SOCKET DE REDE? SOCKETS com PYTHON! Disponível em: https://www.youtube.com/watch?v=aV4p6f2MuJc. Acesso em: set. 2024.
+
+FABRICIO VERONEZ. Docker do zero ao compose: Parte 01. Disponível em: https://www.youtube.com/watch?v=GkMJJkWRgBQ. Acesso em: set. 2024.
