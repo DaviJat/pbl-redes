@@ -10,66 +10,71 @@ def limpar_navegador(navegador):
 
 # Função para enviar a requisição para o servidor
 def enviar_requisicao(method, data):
-    # Gera a requisição a ser enviada para o servidor
-    request = {
-        "method": method,
-        "data": data
-    }
+    try:
+        # Gera a requisição a ser enviada para o servidor
+        request = {
+            "method": method,
+            "data": data
+        }
 
-    # Dicionário para armazenar dados da requisição
-    data_request = {}
+        # Dicionário para armazenar dados da requisição
+        data_request = {}
 
-    # Abre o socket de conexão e envia a requisição
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((SERVER_IP, int(SERVER_PORT)))
-    client_socket.send(json.dumps(request).encode("utf-8"))
+        # Abre o socket de conexão e envia a requisição
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.connect((SERVER_IP, int(SERVER_PORT)))
+        client_socket.send(json.dumps(request).encode("utf-8"))
 
-    # Recebe resposta do cliente
-    server_response = client_socket.recv(8192).decode('utf-8')
-    response = json.loads(server_response)
+        # Recebe resposta do cliente
+        server_response = client_socket.recv(8192).decode('utf-8')
+        response = json.loads(server_response)
 
-    # Verifica se o servidor enviou um layout de página para renderizar
-    page_layout = response.get("page_layout", "")
-    if page_layout != "":
+        # Verifica se o servidor enviou um layout de página para renderizar
+        page_layout = response.get("page_layout", "")
+        if page_layout != "":
+            limpar_navegador(navegador)
+            for item in page_layout:
+                if "dropdown" in item:
+                    dropdown_info = item["dropdown"]
+
+                    label = tk.Label(navegador, text=dropdown_info["label"])
+                    label.pack(pady=5)
+
+                    # Variável que armazena o valor selecionado no dropdown (uma instância para cada dropdown)
+                    numero_selecionado = tk.StringVar(navegador)
+                    numero_selecionado.set(dropdown_info["options"][0])
+
+                    # Função para atualizar o data_request para cada dropdown
+                    def atualizar_data_request(dropdown_name, numero_selecionado_var):
+                        def inner(*args):
+                            valor_selecionado = numero_selecionado_var.get()
+                            data_request[dropdown_name] = valor_selecionado
+                        return inner
+
+                    # Adiciona um trace para chamar a função quando o valor mudar, agora usando a variável correta
+                    numero_selecionado.trace("w", atualizar_data_request(dropdown_info["name"], numero_selecionado))
+
+                    option_menu = tk.OptionMenu(navegador, numero_selecionado, *dropdown_info["options"])
+                    option_menu.pack(pady=5)
+
+                    # Inicializa o valor no data_request
+                    data_request[dropdown_info["name"]] = numero_selecionado.get()
+                    
+                if "button" in item:
+                    button_data = item["button"]
+                    button_label = button_data["label"]
+                    button_method = button_data["method"]
+                    tk.Button(navegador, text=button_label, command=lambda method=button_method, data=data_request: enviar_requisicao(method, data)).pack(pady=10)
+
+                if "message" in item:
+                    message_label = item["message"]
+                    tk.Label(navegador, text=message_label).pack(pady=10)
+
+        client_socket.close()
+    except:
         limpar_navegador(navegador)
-        for item in page_layout:
-            if "dropdown" in item:
-                dropdown_info = item["dropdown"]
-
-                label = tk.Label(navegador, text=dropdown_info["label"])
-                label.pack(pady=5)
-
-                # Variável que armazena o valor selecionado no dropdown (uma instância para cada dropdown)
-                numero_selecionado = tk.StringVar(navegador)
-                numero_selecionado.set(dropdown_info["options"][0])
-
-                # Função para atualizar o data_request para cada dropdown
-                def atualizar_data_request(dropdown_name, numero_selecionado_var):
-                    def inner(*args):
-                        valor_selecionado = numero_selecionado_var.get()
-                        data_request[dropdown_name] = valor_selecionado
-                    return inner
-
-                # Adiciona um trace para chamar a função quando o valor mudar, agora usando a variável correta
-                numero_selecionado.trace("w", atualizar_data_request(dropdown_info["name"], numero_selecionado))
-
-                option_menu = tk.OptionMenu(navegador, numero_selecionado, *dropdown_info["options"])
-                option_menu.pack(pady=5)
-
-                # Inicializa o valor no data_request
-                data_request[dropdown_info["name"]] = numero_selecionado.get()
-                
-            if "button" in item:
-                button_data = item["button"]
-                button_label = button_data["label"]
-                button_method = button_data["method"]
-                tk.Button(navegador, text=button_label, command=lambda method=button_method, data=data_request: enviar_requisicao(method, data)).pack(pady=10)
-
-            if "message" in item:
-                message_label = item["message"]
-                tk.Label(navegador, text=message_label).pack(pady=10)
-
-    client_socket.close()
+        button_label = "Erro na conexão, voltar ao navegador"
+        tk.Button(navegador, text=button_label, command=lambda reiniciar=True : iniciar_navegador(reiniciar)).pack(pady=10)
 
 # Função de conexão ao servidor
 def iniciar_conexao():
@@ -94,8 +99,12 @@ def iniciar_conexao():
         enviar_requisicao(method, data)
 
 # Função para iniciar o navegador
-def iniciar_navegador():
+def iniciar_navegador(reiniciar=False):
     global navegador, ip_entry, port_entry, SERVER_IP, SERVER_PORT
+
+    # Limpar o navegador anterior, caso seja um reinício
+    if reiniciar:
+        navegador.destroy()
 
     # Criação da janela principal
     navegador = tk.Tk()
