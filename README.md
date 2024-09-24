@@ -96,4 +96,6 @@ O sistema desenvolvido para a venda de passagens aéreas de companhias low-cost 
 Embora o sistema esteja funcional, algumas funcionalidades mais avançadas, como o aprimoramento da interface gráfica e validações detalhadas nas operações de compra, ainda podem ser implementadas. Durante o processo, o aprendizado incluiu a implementação de sistemas de comunicação em rede, gerenciamento de dados, criação de uma interface gráfica e uso de estruturas de dados para garantir o bom funcionamento do sistema. Esse conhecimento pode ser aplicado em outros sistemas distribuídos e em projetos que exigem comunicação cliente-servidor.
 
 ## 5. Referências
-PYTHON Software Foundation. Python documentation: socket — Low-level networking interface. Disponível em: https://docs.python.org/3/library/socket.html.
+PYTHON Software Foundation. Python documentation: socket — Low-level networking interface. Disponível em: https://docs.python.org/3/library/socket.html. Acesso em: set. 2024.
+MOZILLA DEVELOPER NETWORK. HTTP - Visão geral. Disponível em: https://developer.mozilla.org/pt-BR/docs/Web/HTTP. Acesso em: set. 2024.
+DOCKER INC. O que é Docker?. Disponível em: https://www.docker.com/what-docker. Acesso em: set. 2024.
