@@ -136,6 +136,7 @@ def iniciar_navegador():
     connect_button = tk.Button(navegador, text="Conectar", command=iniciar_conexao)
     connect_button.grid(row=2, column=0, columnspan=2, pady=10)
 
+    # Inicia a conexão de forma automática, sem o navegador do cliente
     iniciar_conexao()
 
     # Inicia o loop principal do Tkinter
