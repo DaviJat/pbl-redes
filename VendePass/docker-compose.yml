@@ -1,0 +1,82 @@
+version: '3'
+
+services:
+  servidor:
+    build:
+      context: ./servidor
+    container_name: servidor
+    ports:
+      - "61582:61582"
+    restart: unless-stopped
+
+  cliente:
+    build:
+      context: ./cliente
+    container_name: cliente
+    environment:
+      SERVER_IP: servidor
+      SERVER_PORT: 61582
+    ports:
+      - "61583:61583"
+    depends_on:
+      - servidor
+
+  cliente2:
+    build:
+      context: ./cliente
+    container_name: cliente2
+    environment:
+      SERVER_IP: servidor
+      SERVER_PORT: 61582
+    ports:
+      - "61584:61584"
+    depends_on:
+      - servidor
+
+  cliente3:
+    build:
+      context: ./cliente
+    container_name: cliente3
+    environment:
+      SERVER_IP: servidor
+      SERVER_PORT: 61582
+    ports:
+      - "61585:61585"
+    depends_on:
+      - servidor
+
+  cliente4:
+    build:
+      context: ./cliente
+    container_name: cliente4
+    environment:
+      SERVER_IP: servidor
+      SERVER_PORT: 61582
+    ports:
+      - "61586:61586"
+    depends_on:
+      - servidor
+
+  cliente5:
+    build:
+      context: ./cliente
+    container_name: cliente5
+    environment:
+      SERVER_IP: servidor
+      SERVER_PORT: 61582
+    ports:
+      - "61587:61587"
+    depends_on:
+      - servidor
+
+  cliente6:
+    build:
+      context: ./cliente
+    container_name: cliente6
+    environment:
+      SERVER_IP: servidor
+      SERVER_PORT: 61582
+    ports:
+      - "61588:61588"
+    depends_on:
+      - servidor
