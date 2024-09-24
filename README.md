@@ -84,17 +84,27 @@ Após a finalização do projeto, enfrentamos problemas para rodar o cliente no 
 O simulador realiza as mesmas operações que o cliente tradicional, porém executa as requisições de forma sequencial com dados previamente configurados.
 
 ### 3.5 Instruções para execução do sistema
-Construção da Imagem Docker: No terminal, navegue até o diretório onde o Dockerfile está localizado e execute o comando para criar a imagem: docker build -t vendepass-app .
+Construção da Imagem Docker do Servidor: No terminal, navegue até o diretório onde o Dockerfile está localizado e execute o comando para criar a imagem: **docker build -t servidor_vendepass-app .**
 
-Execução Manual do Servidor: Após a imagem ser construída, o servidor pode ser iniciado manualmente com o seguinte comando: docker run -d -p 3000:3000 vendepass-app
+Construção da Imagem Docker do Cliente: No terminal, navegue até o diretório onde o Dockerfile do cliente está localizado e execute o comando para criar a imagem: **docker build -t cliente_vendepass-app .**
 
-Uso do Docker Compose: Para automatizar o processo de iniciar o servidor e os clientes, utilize o comando: docker-compose up
+Execução Manual do Servidor: Após a imagem ser construída, o servidor pode ser iniciado manualmente com o seguinte comando: **docker run --name servidor -p 61582:61582 servidor_vendepass-app**
 
+Exercução Manual do Cliente: Após a imagem ser construída, o cliente pode ser iniciado manualmente com o seguinte comando: **docker run --name cliente1 -e SERVER_IP= servidor -e SERVER_PORT= 61582 -p 61583:61583 cliente_vendepass-app**
+
+Execução múltiplos clientes: Para executar mais clientes, repita o comando anterior, mudando o nome do container e a porta, por exemplo: **docker run --name cliente2 -e SERVER_IP= servidor -e SERVER_PORT=61582 -p 61584:61584 cliente_vendepass-app**
+
+Uso do Docker Compose: Para iniciar todos os serviços (servidor e 6 clientes), execute o comando a seguir no terminal, dentro do diretório que contém o docker-compose.yml:  **docker-compose up**
+
+### 3.6 Armazenamento das rotas do servidor
+O sistema utiliza um arquivo local, chamado "distancias.plk", para armazenar as distâncias entre as cidades e a quantidade de passagens disponíveis para cada rota. O armazenamento é feito com a biblioteca pickle, que salva e carrega os dados em formato binário.
+Quando o servidor inicia, ele tenta carregar as informações do arquivo. Se o arquivo não existir, um conjunto padrão de rotas e passagens é usado, com as distâncias entre as cidades e as quantidades iniciais de bilhetes disponíveis. Em seguida, os dados são salvos no arquivo para garantir que a próxima execução do servidor mantenha as informações atualizadas.
 
 ## 4. Conclusão
 O sistema desenvolvido para a venda de passagens aéreas de companhias low-cost foi implementado com uma arquitetura em sockets TCP/IP, oferecendo uma interface gráfica simples para interação do usuário. Foram criadas funcionalidades que permitem a gestão de rotas e passagens, além da compra de bilhetes. O uso de JSON como protocolo de comunicação trouxe a vantagem de compatibilidade ampla, já que é um formato muito utilizado atualmente.
 
 Embora o sistema esteja funcional, algumas funcionalidades mais avançadas, como o aprimoramento da interface gráfica e validações detalhadas nas operações de compra, ainda podem ser implementadas. Durante o processo, o aprendizado incluiu a implementação de sistemas de comunicação em rede, gerenciamento de dados, criação de uma interface gráfica e uso de estruturas de dados para garantir o bom funcionamento do sistema. Esse conhecimento pode ser aplicado em outros sistemas distribuídos e em projetos que exigem comunicação cliente-servidor.
+
 
 ## 5. Referências
 PYTHON Software Foundation. Python documentation: socket — Low-level networking interface. Disponível em: https://docs.python.org/3/library/socket.html. Acesso em: set. 2024.
