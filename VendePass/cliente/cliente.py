@@ -47,7 +47,6 @@ def enviar_requisicao(method, data):
                 def atualizar_data_request(dropdown_name, numero_selecionado_var):
                     def inner(*args):
                         valor_selecionado = numero_selecionado_var.get()
-                        print(f"---------\n{dropdown_name}\n{valor_selecionado}\n---------")
                         data_request[dropdown_name] = valor_selecionado
                     return inner
 
