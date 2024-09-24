@@ -62,6 +62,7 @@ data: Um dicionário opcional que contém os dados necessários para o método e
 Exemplo de requisição:
 
 ![Figura 1: Exemplo requisição do cliente](https://github.com/user-attachments/assets/eff8e70b-3c1c-4447-bb58-39644563b66b)
+Figura 1: Exemplo requisição do cliente
 
 Figura 1 mostra uma requisição pedindo que o servidor retorne as rotas disponíveis entre as cidades de São Paulo e Rio de Janeiro.
 **Resposta do Servidor**
@@ -72,6 +73,7 @@ Principais componentes da resposta:
 page_layout: Uma lista de componentes da interface, como botões, dropdowns, e mensagens. Cada item possui informações como rótulos e o método a ser executado ao interagir com o elemento.
 
 ![Figura 2: Exemplo resposta do servidor](https://github.com/user-attachments/assets/c2061d4d-02cc-4cc0-9f62-91ab4baef5ab)
+Figura 2: Exemplo resposta do servidor
 
 ### 3.4. Testes
 Nos primeiros testes realizados com os protótipos, descritos no tópico _2.2 Desenvolvimento de protótipos de funcionamento_, foi possível conectar dois clientes simultaneamente ao servidor, cada um em máquinas diferentes, simulando cenários reais de compra de passagens. Esses testes iniciais tinham como objetivo validar a capacidade do sistema de gerenciar múltiplas conexões, verificar a integridade das informações compartilhadas e garantir que atualizações, como a redução de passagens disponíveis, fossem refletidas em tempo real para todos os clientes conectados.
